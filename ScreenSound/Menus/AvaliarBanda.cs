@@ -1,25 +1,22 @@
 ﻿using ScreenSound.Models;
 namespace ScreenSound.Menus;
 
-internal class ExibirDetalhes : Menu
+internal class AvaliarBanda : Menu
 {
     public void Executar(Dictionary<string, Banda> bandasRegistradas)
     {
         Console.Clear();
-        ExibirTituloDaOpcao("Exibir detalhes da banda");
-        Console.Write("Digite o nome da banda que deseja conhecer melhor: ");
+        ExibirTituloDaOpcao("Avaliar uma banda");
+        Console.Write("Digite o nome da banda que deseja avaliar: ");
         string nomeDaBanda = Console.ReadLine()!;
         if (bandasRegistradas.ContainsKey(nomeDaBanda))
         {
             Banda banda = bandasRegistradas[nomeDaBanda];
-            Console.WriteLine($"\nA média da banda {nomeDaBanda} é {banda.Media}.");
-            /**
-            * ESPAÇO RESERVADO PARA COMPLETAR A FUNÇÃO
-            */
-            Console.WriteLine("Digite uma tecla para votar ao menu principal");
-            Console.ReadKey();
+            Console.Write($"Qual a nota que a banda {nomeDaBanda} merece: ");
+            Avaliacao nota = Avaliacao.Parse(Console.ReadLine()!);
+            Console.WriteLine($"\nA nota {nota} foi registrada com sucesso para a banda {nomeDaBanda}");
+            Thread.Sleep(2000);
             Console.Clear();
-
         }
         else
         {
