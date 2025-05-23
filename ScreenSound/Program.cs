@@ -17,23 +17,22 @@ Dictionary<string, Banda> bandasRegistradas = new()
     { beatles.Nome, beatles }
 };
 
-void ExibirLogo()
+Dictionary<int, Menu> opcoes = new()
 {
-    Console.WriteLine(@"
+    { 1, new RegistrarBanda() },
+    { 2, new RegistrarAlbum() },
+    { 3, new MostrarBandasRegistradas() },
+    { 4, new AvaliarBanda() },
+    { 5, new ExibirDetalhes() },
+    { 0, new Sair() }
+};
 
-░██████╗░█████╗░██████╗░███████╗███████╗███╗░░██╗  ░██████╗░█████╗░██╗░░░██╗███╗░░██╗██████╗░
-██╔════╝██╔══██╗██╔══██╗██╔════╝██╔════╝████╗░██║  ██╔════╝██╔══██╗██║░░░██║████╗░██║██╔══██╗
-╚█████╗░██║░░╚═╝██████╔╝█████╗░░█████╗░░██╔██╗██║  ╚█████╗░██║░░██║██║░░░██║██╔██╗██║██║░░██║
-░╚═══██╗██║░░██╗██╔══██╗██╔══╝░░██╔══╝░░██║╚████║  ░╚═══██╗██║░░██║██║░░░██║██║╚████║██║░░██║
-██████╔╝╚█████╔╝██║░░██║███████╗███████╗██║░╚███║  ██████╔╝╚█████╔╝╚██████╔╝██║░╚███║██████╔╝
-╚═════╝░░╚════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░╚══╝  ╚═════╝░░╚════╝░░╚═════╝░╚═╝░░╚══╝╚═════╝░
-");
-    Console.WriteLine("Boas vindas ao Screen Sound 2.0!");
-}
+
 
 void ExibirOpcoesDoMenu()
 {
-    ExibirLogo();
+    Console.Clear();
+    ExibirLogo.Executar();
     Console.WriteLine("\nDigite 1 para registrar uma banda");
     Console.WriteLine("Digite 2 para registrar o álbum de uma banda");
     Console.WriteLine("Digite 3 para mostrar todas as bandas");
@@ -43,47 +42,18 @@ void ExibirOpcoesDoMenu()
 
     Console.Write("\nDigite a sua opção: ");
     string opcaoEscolhida = Console.ReadLine()!;
-    if (int.TryParse(opcaoEscolhida, out int opcaoEscolhidaNumerica))
+    int opcaoEscolhidaInt = int.Parse(opcaoEscolhida);
+
+    if (opcoes.ContainsKey(opcaoEscolhidaInt))
     {
-        switch (opcaoEscolhidaNumerica)
-        {
-            case 1:
-                RegistrarBanda menu1 = new();
-                menu1.Executar(bandasRegistradas);
-                ExibirOpcoesDoMenu();
-                break;
-            case 2:
-                RegistrarAlbum menu2 = new();
-                menu2.Executar(bandasRegistradas);
-                ExibirOpcoesDoMenu();
-                break;
-            case 3:
-                MostrarBandasRegistradas menu3 = new();
-                menu3.Executar(bandasRegistradas);
-                ExibirOpcoesDoMenu();
-                break;
-            case 4:
-                AvaliarBanda menu4 = new();
-                menu4.Executar(bandasRegistradas);
-                ExibirOpcoesDoMenu();
-                break;
-            case 5:
-                ExibirDetalhes menu5 = new();
-                menu5.Executar(bandasRegistradas);
-                ExibirOpcoesDoMenu();
-                break;
-            case 0:
-                Console.WriteLine("Tchau tchau :)");
-                break;
-            default:
-                Console.WriteLine("Opção inválida");
-                break;
-        }
-    }
-    else
+        Menu menuEscolhido = opcoes[opcaoEscolhidaInt];
+        menuEscolhido.Executar(bandasRegistradas);
+    } else
     {
-        Console.WriteLine("Entrada inválida. Por favor, digite um número.");
+        Console.WriteLine("Opção inválida! Tente novamente.");
+        Thread.Sleep(1000);
     }
+        Console.Clear();
 }
 
 ExibirOpcoesDoMenu();

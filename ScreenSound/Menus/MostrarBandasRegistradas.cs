@@ -3,9 +3,10 @@ namespace ScreenSound.Menus;
 
 internal class MostrarBandasRegistradas : Menu
 {
-    public void Executar(Dictionary<string, Banda> bandasRegistradas)
+    public override void Executar(Dictionary<string, Banda> bandasRegistradas)
     {
-        Console.Clear();
+        base.Executar(bandasRegistradas);
+
 
         foreach (string banda in bandasRegistradas.Keys)
         {
