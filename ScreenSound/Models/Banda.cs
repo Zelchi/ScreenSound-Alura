@@ -1,16 +1,15 @@
 ﻿namespace ScreenSound.Models;
 
-internal class Banda
+internal class Banda : IAvaliavel
 {
     private List<Album> albuns = new List<Album>();
     private List<Avaliacao> notas = new List<Avaliacao>();
+    public string Nome { get; }
 
     public Banda(string nome)
     {
-        Nome = nome;
+        Nome = nome.Trim();
     }
-
-    public string Nome { get; }
 
     public double Media 
     {

@@ -17,6 +17,5 @@ internal class Menu
     public virtual void Executar(Dictionary<string, Banda> bandasRegistradas)
     {
         Console.Clear();
-
     }
 }
