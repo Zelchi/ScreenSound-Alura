@@ -1,30 +1,40 @@
-﻿namespace ScreenSound.Models;
+﻿using System;
+using System.Text.Json.Serialization;
+
+namespace ScreenSound.Models;
 
 internal class Musica
 {
-    public Musica(Banda artista, string nome)
+    Musica()
     {
-        Artista = artista;
-        Nome = nome;
+        Banda = string.Empty;
+        Nome = string.Empty;
+        Duracao = string.Empty;
+        Genero = string.Empty;
+        Ano = string.Empty;
     }
 
-    public string Nome { get; }
-    public Banda Artista { get; }
-    public int Duracao { get; set; }
-    public bool Disponivel { get; set; }
-    public string DescricaoResumida => $"A música {Nome} pertence à banda {Artista}";
+    [JsonPropertyName("artist")]
+    public string Banda { get; set; }
+
+    [JsonPropertyName("song")]
+    public string Nome { get; set; }
+
+    [JsonPropertyName("duration")]
+    public string Duracao { get; set; }
+
+    [JsonPropertyName("genre")]
+    public string Genero { get; set; }
+
+    [JsonPropertyName("year")]
+    public string Ano { get; set; }
 
     public void ExibirFichaTecnica()
     {
         Console.WriteLine($"Nome: {Nome}");
-        Console.WriteLine($"Artista: {Artista.Nome}");
+        Console.WriteLine($"Artista: {Banda}");
         Console.WriteLine($"Duração: {Duracao}");
-        if (Disponivel)
-        {
-            Console.WriteLine("Disponível no plano.");
-        } else
-        {
-            Console.WriteLine("Adquira o plano Plus+");
-        }
+        Console.WriteLine($"Gênero: {Genero}");
+        Console.WriteLine($"Ano: {Ano}");
     }
 }
