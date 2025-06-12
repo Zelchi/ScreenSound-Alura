@@ -1,47 +1,57 @@
-﻿using ScreenSound.Models;
-using System.Text.Json;
+﻿using ScreenSound.Menus;
+using ScreenSound.Modelos;
 
-internal class Program
+Artista ira = new Artista("Ira!", "Banda Ira!");
+Artista beatles = new("The Beatles", "Banda The Beatles");
+
+Dictionary<string, Artista> artistasRegistrados = new();
+artistasRegistrados.Add(ira.Nome, ira);
+artistasRegistrados.Add(beatles.Nome, beatles);
+
+Dictionary<int, Menu> opcoes = new();
+opcoes.Add(1, new MenuRegistrarArtista());
+opcoes.Add(2, new MenuRegistrarMusica());
+opcoes.Add(3, new MenuMostrarArtistas());
+opcoes.Add(4, new MenuMostrarMusicas());
+opcoes.Add(-1, new MenuSair());
+
+void ExibirLogo()
 {
-    private static async Task Main()
+    Console.WriteLine(@"
+
+░██████╗░█████╗░██████╗░███████╗███████╗███╗░░██╗  ░██████╗░█████╗░██╗░░░██╗███╗░░██╗██████╗░
+██╔════╝██╔══██╗██╔══██╗██╔════╝██╔════╝████╗░██║  ██╔════╝██╔══██╗██║░░░██║████╗░██║██╔══██╗
+╚█████╗░██║░░╚═╝██████╔╝█████╗░░█████╗░░██╔██╗██║  ╚█████╗░██║░░██║██║░░░██║██╔██╗██║██║░░██║
+░╚═══██╗██║░░██╗██╔══██╗██╔══╝░░██╔══╝░░██║╚████║  ░╚═══██╗██║░░██║██║░░░██║██║╚████║██║░░██║
+██████╔╝╚█████╔╝██║░░██║███████╗███████╗██║░╚███║  ██████╔╝╚█████╔╝╚██████╔╝██║░╚███║██████╔╝
+╚═════╝░░╚════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░╚══╝  ╚═════╝░░╚════╝░░╚═════╝░╚═╝░░╚══╝╚═════╝░
+");
+    Console.WriteLine("Boas vindas ao Screen Sound 3.0!");
+}
+
+void ExibirOpcoesDoMenu()
+{
+    ExibirLogo();
+    Console.WriteLine("\nDigite 1 para registrar um artista");
+    Console.WriteLine("Digite 2 para registrar a música de um artista");
+    Console.WriteLine("Digite 3 para mostrar todos os artistas");
+    Console.WriteLine("Digite 4 para exibir todas as músicas de um artista");
+    Console.WriteLine("Digite -1 para sair");
+
+    Console.Write("\nDigite a sua opção: ");
+    string opcaoEscolhida = Console.ReadLine()!;
+    int opcaoEscolhidaNumerica = int.Parse(opcaoEscolhida);
+
+    if (opcoes.ContainsKey(opcaoEscolhidaNumerica))
     {
-        using HttpClient client = new();
-
-        try
-        {
-            string res = await client.GetStringAsync("https://guilhermeonrails.github.io/api-csharp-songs/songs.json");
-            List<Musica> musicas = JsonSerializer.Deserialize<List<Musica>>(res)!;
-            musicas[1].ExibirFichaTecnica();
-            //LinqFilter.FiltrarTodosOsGenerosMusicais(musicas);
-            //LinqOrder.ExibirListaDeArtistasOrdenados(musicas);
-            //LinqFilter.FiltrarArtistasPorGeneroMusical(musicas, "rock");
-            //LinqFilter.FiltrarMusicasDeUmArtista(musicas, "U2");
-
-            //var musicasFavoritas1 = new MusicasFavoritas("Batata");
-
-            //musicasFavoritas1.AdicionarMusica(
-            //    musicas.GetRange(0, 10)
-            //);
-
-            //musicasFavoritas1.GerarArquivo();
-
-            //musicasFavoritas1.ExibirMusicasFavoritas();
-
-            //var musicasFavoritas2 = new MusicasFavoritas("Batata2");
-            //musicasFavoritas2.AdicionarMusica(musicas[0]);
-            //musicasFavoritas2.ExibirMusicasFavoritas();
-        }
-        catch (HttpRequestException ex)
-        {
-            Console.WriteLine($"Erro na requisição HTTP: {ex.Message}");
-        }
-        catch (JsonException ex)
-        {
-            Console.WriteLine($"Erro ao processar o JSON: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Ocorreu um erro inesperado: {ex.Message}");
-        }
+        Menu menuASerExibido = opcoes[opcaoEscolhidaNumerica];
+        menuASerExibido.Executar(artistasRegistrados);
+        if (opcaoEscolhidaNumerica > 0) ExibirOpcoesDoMenu();
+    } 
+    else
+    {
+        Console.WriteLine("Opção inválida");
     }
 }
+
+ExibirOpcoesDoMenu();
