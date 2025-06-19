@@ -5,7 +5,7 @@
 namespace ScreenSound.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,22 +32,33 @@ namespace ScreenSound.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(type: "TEXT", nullable: false),
-                    AnoLancamento = table.Column<int>(type: "INTEGER", nullable: true)
+                    AnoLancamento = table.Column<int>(type: "INTEGER", nullable: true),
+                    ArtistaId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Musicas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Musicas_Artistas_ArtistaId",
+                        column: x => x.ArtistaId,
+                        principalTable: "Artistas",
+                        principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Musicas_ArtistaId",
+                table: "Musicas",
+                column: "ArtistaId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Artistas");
+                name: "Musicas");
 
             migrationBuilder.DropTable(
-                name: "Musicas");
+                name: "Artistas");
         }
     }
 }
