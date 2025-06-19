@@ -12,6 +12,6 @@ internal class ScreenSoundContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         string connectionString = $"Data Source={Path.Combine(AppContext.BaseDirectory, "ScreenSound.db")}";
-        optionsBuilder.UseSqlite(connectionString);
+        optionsBuilder.UseSqlite(connectionString).UseLazyLoadingProxies();
     }
 }
