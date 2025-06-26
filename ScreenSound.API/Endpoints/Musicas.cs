@@ -1,8 +1,8 @@
-namespace ScreenSound.API.Endpoints;
-
 using Microsoft.AspNetCore.Mvc;
 using ScreenSound.Banco;
 using ScreenSound.Modelos;
+
+namespace ScreenSound.API.Endpoints;
 
 public static class MusicasEndpoints
 {

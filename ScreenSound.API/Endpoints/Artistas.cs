@@ -1,8 +1,9 @@
-namespace ScreenSound.API.Endpoints;
-
+using ScreenSound.API.Requests;
 using Microsoft.AspNetCore.Mvc;
 using ScreenSound.Banco;
 using ScreenSound.Modelos;
+
+namespace ScreenSound.API.Endpoints;
 
 public static class ArtistasEndpoints
 {
@@ -27,8 +28,9 @@ public static class ArtistasEndpoints
         });
 
         // Endpoint para adicionar um novo artista
-        app.MapPost("/artistas", ([FromBody] Artista artista, [FromServices] DAL<Artista> dal) =>
+        app.MapPost("/artistas", ([FromBody] ArtistaRequest artistaRequest, [FromServices] DAL<Artista> dal) =>
         {
+            var artista = new Artista(artistaRequest.nome, artistaRequest.bio);
             dal.Adicionar(artista);
             return Results.Created($"/artistas/{artista.Nome}", artista);
         });
