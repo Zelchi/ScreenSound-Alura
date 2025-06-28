@@ -14,4 +14,9 @@ public class ScreenSoundContext : DbContext
         string connectionString = $"Data Source={Path.Combine(AppContext.BaseDirectory, "ScreenSound.db")}";
         optionsBuilder.UseSqlite(connectionString);
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Musica>().HasMany(r => r.Generos).WithMany(r => r.Musicas);
+    }
 }
