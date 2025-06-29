@@ -1,4 +1,4 @@
-using ScreenSound.API.Requests;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using ScreenSound.Banco;
 using ScreenSound.Modelos;
@@ -7,6 +7,8 @@ namespace ScreenSound.API.Endpoints;
 
 public static class ArtistasEndpoints
 {
+    public record ArtistaRequest([Required] string nome, [Required] string bio);
+
     public static void MapArtistasEndpoints(this WebApplication app)
     {
         // Endpoint para pegar a lista de artistas
