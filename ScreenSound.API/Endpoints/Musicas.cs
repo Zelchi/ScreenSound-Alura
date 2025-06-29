@@ -7,8 +7,8 @@ namespace ScreenSound.API.Endpoints;
 
 public static class MusicasEndpoints
 {
-    public record MusicaRequest([Required] string nome, [Required] int ArtistaId, [Required] int anoLancamento, [Required] ICollection<GeneroRequest> generos);
-    public record GeneroRequest([Required] string nome, [Required] string descricao, [Required] ICollection<MusicaRequest> musicas);
+    private record MusicaRequest([Required] string nome, [Required] int ArtistaId, [Required] int anoLancamento, [Required] ICollection<GeneroRequest> generos);
+    private record GeneroRequest([Required] string nome, [Required] string descricao, [Required] ICollection<MusicaRequest> musicas);
 
     public static void MapMusicasEndpoints(this WebApplication app)
     {
@@ -31,33 +31,16 @@ public static class MusicasEndpoints
         });
 
         // Endpoint para adicionar uma nova música
-        app.MapPost("/musicas", ([FromBody] MusicaRequest musicaReq, [FromServices] DAL<Musica> dal) =>
+        app.MapPost("/musicas", ([FromBody] MusicaRequest musicaRequest, [FromServices] DAL<Musica> dal) =>
         {
-            var musica = new Musica(musicaReq.nome)
+            var musica = new Musica(musicaRequest.nome)
             {
-                AnoLancamento = musicaReq.anoLancamento,
-                Generos = GeneroRequestConverter(musicaReq.generos)
+                AnoLancamento = musicaRequest.anoLancamento,
+                Generos = musicaRequest.generos != null ? GeneroRequestConverter(musicaRequest.generos) : new List<Genero>()
             };
             dal.Adicionar(musica);
             return Results.Created($"/musicas/{musica.Nome}", musica);
         });
-
-        // Método auxiliar para converter a lista de GeneroRequest em ICollection<Genero>
-        static ICollection<Genero> GeneroRequestConverter(ICollection<GeneroRequest> generosReq)
-        {
-            var generos = new List<Genero>();
-            foreach (var generoReq in generosReq)
-            {
-                var genero = new Genero
-                {
-                    Nome = generoReq.nome,
-                    Descricao = generoReq.descricao,
-                    Musicas = generoReq.musicas.Select(m => new Musica(m.nome)).ToList()
-                };
-                generos.Add(genero);
-            }
-            return generos;
-        }
 
         // Endpoint para atualizar uma música existente
         app.MapPut("/musicas/{id}", ([FromServices] DAL<Musica> dal, [FromBody] Musica musicaAtualizada, string id) =>
@@ -73,5 +56,16 @@ public static class MusicasEndpoints
             dal.Atualizar(musica);
             return Results.Ok(musica);
         });
+    }
+
+    // Método auxiliar para converter a lista de GeneroRequest em ICollection<Genero>
+    private static ICollection<Genero> GeneroRequestConverter(ICollection<GeneroRequest> generos)
+    {
+        return generos.Select(a => RequestToEntity(a)).ToList();
+    }
+
+    private static Genero RequestToEntity(GeneroRequest genero)
+    {
+        return new Genero() { Nome = genero.nome, Descricao = genero.descricao };
     }
 }
