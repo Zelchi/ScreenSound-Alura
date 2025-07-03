@@ -7,8 +7,8 @@ namespace ScreenSound.API.Endpoints;
 
 public static class MusicasEndpoints
 {
-    private record MusicaRequest([Required] string nome, [Required] int ArtistaId, [Required] int anoLancamento, [Required] ICollection<GeneroRequest> generos);
     private record GeneroRequest([Required] string nome, [Required] string descricao, [Required] ICollection<MusicaRequest> musicas);
+    private record MusicaRequest([Required] string nome, [Required] int anoLancamento, [Required] ICollection<GeneroRequest> generos);
 
     public static void MapMusicasEndpoints(this WebApplication app)
     {
@@ -23,7 +23,7 @@ public static class MusicasEndpoints
         app.MapGet("/musicas/{titulo}", ([FromServices] DAL<Musica> dal, string titulo) =>
         {
             var musica = dal.RecuperarPor(m => m.Nome.ToUpper().Equals(titulo.ToUpper()));
-            if (musica is null)
+            if (musica == null)
             {
                 return Results.NotFound($"Música não encontrada.");
             }

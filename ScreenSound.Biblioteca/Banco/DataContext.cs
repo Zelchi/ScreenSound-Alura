@@ -12,11 +12,13 @@ public class ScreenSoundContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         string connectionString = $"Data Source={Path.Combine(AppContext.BaseDirectory, "ScreenSound.db")}";
-        optionsBuilder.UseSqlite(connectionString);
+        optionsBuilder.UseSqlite(connectionString).UseLazyLoadingProxies();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Musica>().HasMany(r => r.Generos).WithMany(r => r.Musicas);
+        modelBuilder.Entity<Musica>()
+            .HasMany(c => c.Generos)
+            .WithMany(c => c.Musicas);
     }
 }

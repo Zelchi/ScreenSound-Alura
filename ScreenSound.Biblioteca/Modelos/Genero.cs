@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace ScreenSound.Modelos;
 
 public class Genero
@@ -5,6 +7,8 @@ public class Genero
     public int Id { get; set; }
     public string Nome { get; set; } = string.Empty;
     public string Descricao { get; set; } = string.Empty;
+
+    [JsonIgnore]
     public virtual ICollection<Musica> Musicas { get; set; } = new List<Musica>();
 
     public void ExibirFichaTecnica()
